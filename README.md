@@ -59,8 +59,10 @@ Incluyen: páginas, formulario de contacto, CRUD de casos y peritos, reglas de n
 ## Entregables del Avance 3
 | Archivo | Contenido |
 |---|---|
-| `docs/entregables/Avance03_ProyectoFinal_LAFORSE_Jens.pdf` (y `.docx`) | Informe: diseño de BD, servicios, integración, interfaces, pruebas, UML y anexos |
-| `docs/entregables/Avance03_Exposicion_LAFORSE.pptx` | Presentación de 9 diapositivas (guion en las notas del orador) |
-| `docs/entregables/Guion_Exposicion_Avance03_LAFORSE.docx` | Guion de exposición de 7 minutos y preguntas probables |
+| [`docs/entregables/Avance03_ProyectoFinal_LAFORSE_Jens.pdf`](docs/entregables/Avance03_ProyectoFinal_LAFORSE_Jens.pdf) | Informe: diseño de BD, servicios, integración, interfaces, pruebas, UML y anexos |
+| [`docs/entregables/Avance03_Exposicion_LAFORSE.pptx`](docs/entregables/Avance03_Exposicion_LAFORSE.pptx) | Presentación de la exposición (9 diapositivas) |
+
+## Video de la exposición
+▶️ **[Ver la exposición del Avance 3 en YouTube](https://www.youtube.com/playlist?list=PLMEk-IU6stbw)** (29/10/2026)
 
 **Autor:** Jens Fabrizio Colchado Chavez · Universidad Tecnológica del Perú · Marcos de Desarrollo Web (100000S52T)
