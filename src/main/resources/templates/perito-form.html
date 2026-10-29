@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head((${perito.id == null} ? 'Nuevo perito' : 'Editar perito'))}"></head>
+<body class="d-flex flex-column min-vh-100">
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<main class="lf-main">
+  <header th:replace="~{fragments/layout :: pageHeader('Gestión de peritos', (${perito.id == null} ? 'Registrar perito' : 'Editar perito'), 'El correo institucional es único: no puede repetirse entre peritos.')}"></header>
+
+  <section class="py-5 section-soft">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-7">
+          <div class="card form-card shadow-sm">
+            <div class="card-body p-4 p-lg-5">
+              <div th:if="${#fields.hasErrors('${perito.*}')}" class="alert alert-warning small">Revise los campos marcados en rojo.</div>
+              <form th:action="@{/peritos}" th:object="${perito}" method="post" novalidate class="row g-3 needs-validation">
+                <input type="hidden" th:field="*{id}">
+                <div class="col-12">
+                  <label for="nombres" class="form-label fw-semibold req">Nombres y apellidos</label>
+                  <input type="text" id="nombres" th:field="*{nombres}" class="form-control" required minlength="3" maxlength="80" th:errorclass="is-invalid">
+                  <div class="invalid-feedback" th:if="${#fields.hasErrors('nombres')}" th:text="${#fields.errors('nombres')[0]}"></div>
+                  <div class="invalid-feedback" th:unless="${#fields.hasErrors('nombres')}">Entre 3 y 80 caracteres.</div>
+                </div>
+                <div class="col-md-6">
+                  <label for="especialidad" class="form-label fw-semibold req">Especialidad</label>
+                  <input type="text" id="especialidad" th:field="*{especialidad}" class="form-control" required maxlength="60"
+                         list="especialidades" th:errorclass="is-invalid">
+                  <datalist id="especialidades">
+                    <option value="Forense de cómputo"><option value="Forense móvil"><option value="Respuesta a incidentes"><option value="Auditoría forense">
+                  </datalist>
+                  <div class="invalid-feedback" th:if="${#fields.hasErrors('especialidad')}" th:text="${#fields.errors('especialidad')[0]}"></div>
+                  <div class="invalid-feedback" th:unless="${#fields.hasErrors('especialidad')}">Ingrese la especialidad.</div>
+                </div>
+                <div class="col-md-6">
+                  <label for="telefono" class="form-label fw-semibold">Celular</label>
+                  <input type="tel" id="telefono" th:field="*{telefono}" class="form-control" pattern="9[0-9]{8}" placeholder="9XXXXXXXX" th:errorclass="is-invalid">
+                  <div class="invalid-feedback" th:if="${#fields.hasErrors('telefono')}" th:text="${#fields.errors('telefono')[0]}"></div>
+                  <div class="invalid-feedback" th:unless="${#fields.hasErrors('telefono')}">9 dígitos, inicia con 9.</div>
+                </div>
+                <div class="col-12">
+                  <label for="correo" class="form-label fw-semibold req">Correo institucional</label>
+                  <input type="email" id="correo" th:field="*{correo}" class="form-control" required maxlength="100" th:errorclass="is-invalid" placeholder="nombre@laforse-hg.com">
+                  <div class="invalid-feedback" th:if="${#fields.hasErrors('correo')}" th:text="${#fields.errors('correo')[0]}"></div>
+                  <div class="invalid-feedback" th:unless="${#fields.hasErrors('correo')}">Ingrese un correo válido.</div>
+                </div>
+                <div class="col-12">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="activo" th:field="*{activo}">
+                    <label class="form-check-label" for="activo">Activo (puede recibir casos nuevos)</label>
+                  </div>
+                </div>
+                <div class="col-12 d-flex gap-2 justify-content-end pt-2">
+                  <a th:href="@{/peritos}" class="btn btn-outline-secondary">Cancelar</a>
+                  <button type="submit" class="btn btn-lf px-4"><i class="bi bi-save"></i>
+                    <span th:text="${perito.id == null} ? 'Registrar perito' : 'Guardar cambios'">Guardar</span></button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>

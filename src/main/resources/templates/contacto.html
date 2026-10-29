@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Contacto')}"></head>
+<body class="d-flex flex-column min-vh-100">
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<main class="lf-main">
+  <header th:replace="~{fragments/layout :: pageHeader('Contacto', 'Solicita una evaluación preliminar', 'Completa el formulario y un perito certificado se comunicará contigo para evaluar la confidencialidad, el alcance y los plazos de tu caso.')}"></header>
+
+  <section class="py-5 section-soft">
+    <div class="container">
+      <div class="row g-5">
+        <div class="col-lg-4">
+          <h2 class="h4 mb-3">Datos de contacto</h2>
+          <ul class="list-unstyled text-muted">
+            <li class="mb-2"><i class="bi bi-geo-alt text-info me-2"></i><span th:text="${ciudadEmpresa}">Lima</span></li>
+            <li class="mb-2"><i class="bi bi-envelope text-info me-2"></i><span th:text="${correoEmpresa}">correo</span></li>
+            <li class="mb-2"><i class="bi bi-telephone text-info me-2"></i><span th:text="${telefonoEmpresa}">teléfono</span></li>
+            <li class="mb-2"><i class="bi bi-clock text-info me-2"></i>Lunes a sábado, 8:00 – 19:00 · Incidentes 24/7</li>
+          </ul>
+          <div class="alert alert-info small d-flex gap-2" role="note">
+            <i class="bi bi-lock-fill"></i>
+            <span>No adjunte evidencia en este formulario. El perito le indicará cómo entregarla preservando la cadena de custodia.</span>
+          </div>
+        </div>
+
+        <div class="col-lg-8">
+          <div class="card border-0 shadow-sm rounded-4">
+            <div class="card-body p-4 p-lg-5">
+              <!-- Errores del servidor (Bean Validation) -->
+              <div th:if="${#fields.hasErrors('${contacto.*}')}" class="alert alert-danger" role="alert">
+                <i class="bi bi-exclamation-triangle-fill"></i> Revise los campos marcados antes de enviar.
+              </div>
+
+              <form th:action="@{/contacto}" th:object="${contacto}" method="post" novalidate class="row g-3 needs-validation">
+                <div class="col-md-6">
+                  <label for="nombre" class="form-label">Nombres completos</label>
+                  <input type="text" id="nombre" th:field="*{nombre}" class="form-control" required minlength="3" maxlength="80"
+                         th:errorclass="is-invalid" placeholder="Ej. Ana Torres Ruiz">
+                  <div class="invalid-feedback" th:if="${#fields.hasErrors('nombre')}" th:text="${#fields.errors('nombre')[0]}"></div>
+                  <div class="invalid-feedback" th:unless="${#fields.hasErrors('nombre')}">Ingrese sus nombres completos.</div>
+                </div>
+                <div class="col-md-6">
+                  <label for="correo" class="form-label">Correo electrónico</label>
+                  <input type="email" id="correo" th:field="*{correo}" class="form-control" required
+                         th:errorclass="is-invalid" placeholder="nombre@empresa.com">
+                  <div class="invalid-feedback" th:if="${#fields.hasErrors('correo')}" th:text="${#fields.errors('correo')[0]}"></div>
+                  <div class="invalid-feedback" th:unless="${#fields.hasErrors('correo')}">Ingrese un correo válido.</div>
+                </div>
+                <div class="col-md-6">
+                  <label for="telefono" class="form-label">Celular <span class="text-muted small">(opcional)</span></label>
+                  <input type="tel" id="telefono" th:field="*{telefono}" class="form-control" pattern="9[0-9]{8}"
+                         th:errorclass="is-invalid" placeholder="9XXXXXXXX">
+                  <div class="invalid-feedback" th:if="${#fields.hasErrors('telefono')}" th:text="${#fields.errors('telefono')[0]}"></div>
+                  <div class="invalid-feedback" th:unless="${#fields.hasErrors('telefono')}">9 dígitos, inicia con 9.</div>
+                </div>
+                <div class="col-md-6">
+                  <label for="servicioId" class="form-label">Tipo de caso</label>
+                  <select id="servicioId" th:field="*{servicioId}" class="form-select" required th:errorclass="is-invalid">
+                    <option value="">Selecciona una opción</option>
+                    <option th:each="s : ${servicios}" th:value="${s.id}" th:text="${s.nombre}">Servicio</option>
+                  </select>
+                  <div class="invalid-feedback" th:if="${#fields.hasErrors('servicioId')}" th:text="${#fields.errors('servicioId')[0]}"></div>
+                  <div class="invalid-feedback" th:unless="${#fields.hasErrors('servicioId')}">Seleccione el tipo de caso.</div>
+                </div>
+                <div class="col-12">
+                  <label class="form-label d-block">Nivel de urgencia</label>
+                  <div class="form-check form-check-inline" th:each="u : ${urgencias}">
+                    <input class="form-check-input" type="radio" th:field="*{urgencia}" th:value="${u}" required th:errorclass="is-invalid">
+                    <label class="form-check-label" th:for="${#ids.prev('urgencia')}" th:text="${u.etiqueta}">Urgencia</label>
+                  </div>
+                  <div class="text-danger small" th:if="${#fields.hasErrors('urgencia')}" th:text="${#fields.errors('urgencia')[0]}"></div>
+                </div>
+                <div class="col-12">
+                  <label for="mensaje" class="form-label">Describe brevemente el caso</label>
+                  <textarea id="mensaje" th:field="*{mensaje}" rows="5" class="form-control" required minlength="20" maxlength="600"
+                            th:errorclass="is-invalid" placeholder="¿Qué ocurrió, qué dispositivos están involucrados y para qué necesita el peritaje?"></textarea>
+                  <div class="form-text text-end" id="contadorMensaje">0 / 600</div>
+                  <div class="invalid-feedback" th:if="${#fields.hasErrors('mensaje')}" th:text="${#fields.errors('mensaje')[0]}"></div>
+                  <div class="invalid-feedback" th:unless="${#fields.hasErrors('mensaje')}">Mínimo 20 caracteres.</div>
+                </div>
+                <div class="col-12">
+                  <div class="form-check">
+                    <input type="checkbox" id="acepta" th:field="*{acepta}" class="form-check-input" required th:errorclass="is-invalid">
+                    <label for="acepta" class="form-check-label small">Acepto el tratamiento confidencial de mi información según el
+                      <a href="#" data-bs-toggle="modal" data-bs-target="#modalPrivacidad">aviso de privacidad</a>.</label>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('acepta')}" th:text="${#fields.errors('acepta')[0]}"></div>
+                    <div class="invalid-feedback" th:unless="${#fields.hasErrors('acepta')}">Debe aceptar para continuar.</div>
+                  </div>
+                </div>
+                <div class="col-12 d-grid d-md-block">
+                  <button type="submit" class="btn btn-lf btn-lg px-4"><i class="bi bi-send-fill"></i> Enviar solicitud</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- Modal: aviso de privacidad -->
+<div class="modal fade" id="modalPrivacidad" tabindex="-1" aria-labelledby="tituloPrivacidad" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="tituloPrivacidad"><i class="bi bi-shield-lock"></i> Aviso de privacidad</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body small">
+        <p>De acuerdo con la Ley N.° 29733, Ley de Protección de Datos Personales, LAFORSE-HG utilizará los datos de este formulario
+          únicamente para evaluar su solicitud y comunicarse con usted.</p>
+        <p class="mb-0">Sus datos no se comparten con terceros y puede solicitar su eliminación escribiendo a
+          <span th:text="${correoEmpresa}">correo</span>.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-lf" data-bs-dismiss="modal">Entendido</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de confirmación: solo se renderiza cuando el controlador envía la solicitud registrada -->
+<div th:if="${solicitud}" class="modal fade" id="modalConfirmacion" tabindex="-1" aria-labelledby="tituloConfirmacion" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content text-center">
+      <div class="modal-body p-5">
+        <i class="bi bi-check-circle-fill text-success display-4"></i>
+        <h4 class="mt-3" id="tituloConfirmacion">¡Solicitud registrada!</h4>
+        <p class="text-muted">Gracias, <strong th:text="${solicitud.nombre}">nombre</strong>. Un perito revisará su caso de
+          <strong th:text="${solicitud.servicio.nombre}">servicio</strong> y le escribirá a <span th:text="${solicitud.correo}">correo</span>.</p>
+        <p class="mb-1 small text-muted">Código de seguimiento</p>
+        <p class="font-mono fs-4 fw-bold" th:text="${solicitud.codigo}">SOL-2026-0001</p>
+        <p class="small text-muted mb-4">Urgencia: <span th:text="${solicitud.urgencia.etiqueta}">Media</span> ·
+          <span th:text="${#temporals.format(solicitud.fecha, 'dd/MM/yyyy HH:mm')}">fecha</span></p>
+        <button type="button" class="btn btn-outline-dark me-2" id="btnCopiar"><i class="bi bi-clipboard"></i> Copiar código</button>
+        <button type="button" class="btn btn-lf" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+<script th:if="${solicitud}" th:inline="javascript">
+  const codigo = /*[[${solicitud.codigo}]]*/ 'SOL-2026-0001';
+  new bootstrap.Modal('#modalConfirmacion').show();
+  document.getElementById('btnCopiar').addEventListener('click', function () {
+    navigator.clipboard.writeText(codigo);
+    this.innerHTML = '<i class="bi bi-clipboard-check"></i> Copiado';
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+target/
+*.log
+.idea/
+*.iml
+nbproject/
+nbactions.xml
+.vscode/
+.DS_Store
+~$*

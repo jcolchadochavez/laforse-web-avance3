@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Quiénes somos')}"></head>
+<body class="d-flex flex-column min-vh-100">
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<main class="lf-main">
+  <header th:replace="~{fragments/layout :: pageHeader('Quiénes somos', 'Especialistas en peritaje informático', ${empresa.rubro})}"></header>
+
+  <section class="py-5">
+    <div class="container">
+      <div class="row g-5 align-items-center">
+        <div class="col-lg-6">
+          <img th:src="@{/img/laboratorio.svg}" class="img-fluid rounded-4 shadow" alt="Ilustración del laboratorio forense con estaciones de análisis">
+        </div>
+        <div class="col-lg-6">
+          <p class="eyebrow mb-2">Nuestra empresa</p>
+          <h2 class="mb-3" th:text="${empresa.nombre}">LAFORSE-HG</h2>
+          <p class="text-muted">Somos una empresa especializada en la adquisición, análisis y documentación de evidencia digital para
+            procesos judiciales, corporativos y de cumplimiento normativo. Atendemos a estudios jurídicos, fiscalías, áreas de
+            auditoría interna y empresas privadas que requieren dictámenes periciales con validez técnico-legal.</p>
+          <div class="row g-3 mt-2">
+            <div class="col-md-6">
+              <div class="card card-lf h-100">
+                <div class="card-body">
+                  <span class="icon-box mb-2"><i class="bi bi-bullseye"></i></span>
+                  <h5>Misión</h5>
+                  <p class="small text-muted mb-0" th:text="${empresa.mision}">Misión</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="card card-lf h-100">
+                <div class="card-body">
+                  <span class="icon-box mb-2"><i class="bi bi-eye"></i></span>
+                  <h5>Visión</h5>
+                  <p class="small text-muted mb-0" th:text="${empresa.vision}">Visión</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-5 section-soft">
+    <div class="container">
+      <div class="text-center mb-4">
+        <p class="eyebrow mb-2">Hacia dónde vamos</p>
+        <h2>Objetivos organizacionales</h2>
+      </div>
+      <div class="row row-cols-1 row-cols-md-2 g-3 col-lg-10 mx-auto">
+        <div class="col" th:each="obj, it : ${empresa.objetivos}">
+          <div class="d-flex gap-3 bg-white rounded-3 p-3 h-100 border">
+            <span class="badge rounded-pill text-bg-dark align-self-start fs-6" th:text="${it.count}">1</span>
+            <p class="mb-0" th:text="${obj}">Objetivo</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Organigrama generado a partir del Map del modelo -->
+  <section class="py-5">
+    <div class="container">
+      <div class="text-center mb-4">
+        <p class="eyebrow mb-2">Estructura</p>
+        <h2>Organigrama</h2>
+      </div>
+      <div class="text-center mb-4"><span class="org-node d-inline-block">Gerencia General</span></div>
+      <div class="row g-4">
+        <div class="col-md-4" th:each="area : ${empresa.organigrama}">
+          <div class="org-area text-center mb-3" th:text="${area.key}">Área</div>
+          <div class="d-flex flex-column gap-2">
+            <div class="org-sub text-center" th:each="cargo : ${area.value}" th:text="${cargo}">Cargo</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>

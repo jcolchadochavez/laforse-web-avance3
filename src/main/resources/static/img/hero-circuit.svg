@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 430" role="img" aria-label="Placa de circuito iluminada">
+  <defs>
+    <radialGradient id="bg" cx="55%" cy="40%" r="75%">
+      <stop offset="0" stop-color="#0f3a4c"/><stop offset="1" stop-color="#050d16"/>
+    </radialGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M20 0H0V20" fill="none" stroke="#13a3b4" stroke-opacity=".08"/>
+    </pattern>
+  </defs>
+  <rect width="640" height="430" fill="url(#bg)"/>
+  <rect width="640" height="430" fill="url(#grid)"/>
+  <g fill="none" stroke="#2fd6e6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)" opacity=".9">
+    <path d="M0 80H120L160 120H260"/><path d="M0 140H90L130 180H250"/><path d="M0 330H140L180 290H260"/>
+    <path d="M0 380H200L230 350H260"/><path d="M640 70H520L480 110H380"/><path d="M640 150H540L500 190H390"/>
+    <path d="M640 300H530L490 260H390"/><path d="M640 370H460L430 340H390"/>
+    <path d="M300 0V60L320 80V140"/><path d="M350 0V140"/><path d="M300 430V360L320 340V290"/><path d="M350 430V290"/>
+    <path d="M60 230H260"/><path d="M390 230H600"/>
+  </g>
+  <g fill="#2fd6e6" filter="url(#glow)">
+    <circle cx="260" cy="120" r="5"/><circle cx="250" cy="180" r="5"/><circle cx="260" cy="290" r="5"/><circle cx="260" cy="350" r="5"/>
+    <circle cx="380" cy="110" r="5"/><circle cx="390" cy="190" r="5"/><circle cx="390" cy="260" r="5"/><circle cx="390" cy="340" r="5"/>
+    <circle cx="60" cy="230" r="5"/><circle cx="600" cy="230" r="5"/>
+  </g>
+  <rect x="255" y="140" width="140" height="150" rx="14" fill="#0b1d2e" stroke="#2fd6e6" stroke-width="2.5" filter="url(#glow)"/>
+  <g stroke="#13a3b4" stroke-width="3">
+    <path d="M270 140V128M290 140V128M310 140V128M330 140V128M350 140V128M370 140V128M270 290V302M290 290V302M310 290V302M330 290V302M350 290V302M370 290V302"/>
+  </g>
+  <g transform="translate(325 215)" fill="none" stroke="#e8fbfd" stroke-width="3.5" stroke-linecap="round">
+    <path d="M-24-18a30 30 0 0 1 48 0"/><path d="M-32 0a32 32 0 0 1 64 0v10"/><path d="M-18 4a18 18 0 0 1 36 0c0 12-4 22-10 30"/>
+    <path d="M-6 4a6 6 0 0 1 12 0c0 14-3 24-9 32"/><path d="M-30 12c0 10 2 18 6 24"/>
+  </g>
+</svg>

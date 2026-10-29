@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Servicios')}"></head>
+<body class="d-flex flex-column min-vh-100">
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<main class="lf-main">
+  <header th:replace="~{fragments/layout :: pageHeader('Qué hacemos', 'Servicios de laboratorio forense', 'Un flujo de trabajo trazable, desde la adquisición de la evidencia hasta el dictamen pericial final.')}"></header>
+
+  <section class="py-5 section-soft">
+    <div class="container">
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        <div class="col" th:each="s : ${servicios}">
+          <div class="card card-lf h-100 p-2">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-start mb-3">
+                <span class="icon-box"><i class="bi" th:classappend="${s.icono}"></i></span>
+                <span th:if="${s.disponible}" class="badge text-bg-success"><i class="bi bi-check-circle"></i> Disponible</span>
+                <span th:unless="${s.disponible}" class="badge text-bg-secondary"><i class="bi bi-clock"></i> Bajo demanda</span>
+              </div>
+              <h5 class="card-title" th:text="${s.nombre}">Servicio</h5>
+              <p class="card-text text-muted" th:text="${s.resumen}">Resumen</p>
+            </div>
+            <div class="card-footer bg-transparent border-0 d-flex gap-2">
+              <button type="button" class="btn btn-outline-dark btn-sm"
+                      data-bs-toggle="modal" data-bs-target="#modalServicio"
+                      th:data-nombre="${s.nombre}" th:data-descripcion="${s.descripcion}"
+                      th:data-herramientas="${#strings.listJoin(s.herramientas, ', ')}" th:data-plazo="${s.plazo}"
+                      th:data-solicitar="@{/contacto(servicio=${s.id})}" th:data-detalle="@{/servicios/{id}(id=${s.id})}">
+                <i class="bi bi-window-stack"></i> Vista rápida
+              </button>
+              <a th:href="@{/contacto(servicio=${s.id})}" class="btn btn-lf btn-sm">Solicitar</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Preguntas frecuentes: acordeón de Bootstrap -->
+  <section class="py-5">
+    <div class="container col-lg-9">
+      <div class="text-center mb-4">
+        <p class="eyebrow mb-2">Dudas comunes</p>
+        <h2>Preguntas frecuentes</h2>
+      </div>
+      <div class="accordion" id="faq">
+        <div class="accordion-item">
+          <h3 class="accordion-header">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1" aria-expanded="true" aria-controls="faq1">
+              ¿El dictamen tiene validez en un proceso judicial?
+            </button>
+          </h3>
+          <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faq">
+            <div class="accordion-body">Sí. Seguimos la norma ISO/IEC 27037 y documentamos la cadena de custodia desde la adquisición, por lo que el perito puede ratificar el informe en audiencia.</div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h3 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2" aria-expanded="false" aria-controls="faq2">
+              ¿Se puede recuperar información borrada de un celular?
+            </button>
+          </h3>
+          <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faq">
+            <div class="accordion-body">Depende del modelo, el sistema operativo y el tiempo transcurrido. Tras una evaluación inicial indicamos qué tipo de extracción es viable.</div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h3 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3" aria-expanded="false" aria-controls="faq3">
+              ¿Cómo se protege la confidencialidad de mi caso?
+            </button>
+          </h3>
+          <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faq">
+            <div class="accordion-body">Firmamos un acuerdo de confidencialidad, la evidencia se custodia en un laboratorio con acceso restringido y solo el perito asignado manipula la información.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- Ventana modal reutilizada por todas las tarjetas (contenido con JS en app.js) -->
+<div class="modal fade" id="modalServicio" tabindex="-1" aria-labelledby="modalServicioTitulo" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header lf-navbar text-white">
+        <h5 class="modal-title" id="modalServicioTitulo">Servicio</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <p data-campo="descripcion"></p>
+        <dl class="row mb-0">
+          <dt class="col-sm-3">Herramientas</dt><dd class="col-sm-9" data-campo="herramientas"></dd>
+          <dt class="col-sm-3">Plazo estimado</dt><dd class="col-sm-9 mb-0" data-campo="plazo"></dd>
+        </dl>
+      </div>
+      <div class="modal-footer">
+        <a href="#" class="btn btn-outline-dark" data-campo="detalle">Ver ficha completa</a>
+        <a href="#" class="btn btn-lf" data-campo="solicitar">Solicitar este servicio</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>

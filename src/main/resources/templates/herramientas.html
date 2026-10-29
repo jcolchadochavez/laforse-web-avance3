@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Herramientas')}"></head>
+<body class="d-flex flex-column min-vh-100">
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<main class="lf-main">
+  <header th:replace="~{fragments/layout :: pageHeader('Tecnología forense', 'Herramientas que utilizamos', 'Trabajamos con las soluciones forenses líderes de la industria, empleadas por los principales departamentos de investigación a nivel mundial.')}"></header>
+
+  <section class="py-5">
+    <div class="container">
+      <!-- Pestañas generadas por categoría (Map agrupado en el servicio) -->
+      <ul class="nav nav-pills justify-content-center flex-wrap gap-2 mb-4" role="tablist">
+        <li class="nav-item" role="presentation" th:each="cat, it : ${categorias}">
+          <button class="nav-link" th:classappend="${it.first} ? 'active'" type="button" role="tab" data-bs-toggle="pill"
+                  th:id="'tab-' + ${it.index}" th:data-bs-target="'#panel-' + ${it.index}"
+                  th:aria-selected="${it.first}" th:aria-controls="'panel-' + ${it.index}">
+            <span th:text="${cat.key}">Categoría</span>
+            <span class="badge text-bg-light ms-1" th:text="${#lists.size(cat.value)}">2</span>
+          </button>
+        </li>
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane fade" th:each="cat, it : ${categorias}" th:classappend="${it.first} ? 'show active'"
+             th:id="'panel-' + ${it.index}" role="tabpanel" th:aria-labelledby="'tab-' + ${it.index}">
+          <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4 justify-content-center">
+            <div class="col" th:each="h : ${cat.value}">
+              <div class="card card-lf h-100 text-center p-3">
+                <span class="icon-box mx-auto mb-3"><i class="bi" th:classappend="${h.icono}"></i></span>
+                <h5 th:text="${h.nombre}">Herramienta</h5>
+                <p class="small text-muted mb-2" th:text="${h.fabricante}">Fabricante</p>
+                <p class="small mb-0" th:text="${h.descripcion}">Descripción</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-5 section-soft">
+    <div class="container">
+      <div class="row g-4 align-items-center">
+        <div class="col-md-8">
+          <h3 class="mb-2">Licencias vigentes y peritos certificados</h3>
+          <p class="text-muted mb-0">Cada herramienta se usa con licencia oficial y por personal capacitado, lo que permite sustentar la
+            metodología ante el juez o la parte contraria.</p>
+        </div>
+        <div class="col-md-4 text-md-end">
+          <a th:href="@{/servicios}" class="btn btn-outline-dark">Ver servicios</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(${servicio.nombre})}"></head>
+<body class="d-flex flex-column min-vh-100">
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<main class="lf-main">
+  <header th:replace="~{fragments/layout :: pageHeader('Servicio', ${servicio.nombre}, ${servicio.resumen})}"></header>
+
+  <section class="py-5">
+    <div class="container">
+      <div class="row g-5">
+        <div class="col-lg-8">
+          <h2 class="h4 mb-3">¿En qué consiste?</h2>
+          <p class="text-muted" th:text="${servicio.descripcion}">Descripción</p>
+
+          <h2 class="h4 mt-4 mb-3">Entregables</h2>
+          <ul class="list-group list-group-flush mb-4">
+            <li class="list-group-item px-0" th:each="e : ${servicio.entregables}">
+              <i class="bi bi-check2-circle text-success me-2"></i><span th:text="${e}">Entregable</span>
+            </li>
+          </ul>
+
+          <h2 class="h4 mb-3">Herramientas utilizadas</h2>
+          <span class="badge rounded-pill text-bg-light border me-1 mb-1 p-2" th:each="h : ${servicio.herramientas}" th:text="${h}">Herramienta</span>
+        </div>
+
+        <aside class="col-lg-4">
+          <div class="card card-lf">
+            <div class="card-body">
+              <span class="icon-box mb-3"><i class="bi" th:classappend="${servicio.icono}"></i></span>
+              <p class="small text-muted mb-1">Plazo estimado</p>
+              <p class="fw-bold" th:text="${servicio.plazo}">Plazo</p>
+              <p class="small text-muted mb-1">Disponibilidad</p>
+              <p class="fw-bold" th:text="${servicio.disponible} ? 'Inmediata' : 'Bajo demanda'">Inmediata</p>
+              <a th:href="@{/contacto(servicio=${servicio.id})}" class="btn btn-lf w-100">Solicitar este servicio</a>
+            </div>
+          </div>
+          <div class="list-group mt-4">
+            <span class="list-group-item small text-muted fw-semibold">Otros servicios</span>
+            <a th:each="s : ${servicios}" th:unless="${s.id == servicio.id}"
+               th:href="@{/servicios/{id}(id=${s.id})}" class="list-group-item list-group-item-action" th:text="${s.nombre}">Servicio</a>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>

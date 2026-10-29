@@ -1,0 +1,85 @@
+/* ===== Identidad visual LAFORSE-HG (sobre Bootstrap 5) ===== */
+:root {
+  --lf-navy: #0b1d2e;
+  --lf-navy-2: #12324a;
+  --lf-teal: #13a3b4;
+  --lf-teal-soft: #e3f5f7;
+  --lf-bg-soft: #f3f6f9;
+  --bs-font-sans-serif: "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --bs-primary: #13a3b4;
+  --bs-primary-rgb: 19, 163, 180;
+  --bs-link-color: #0f8796;
+  --bs-link-hover-color: #0b6772;
+}
+
+body { color: #1d2b36; }
+h1, h2, h3, h4, h5, .display-5, .display-6, .navbar-brand { font-weight: 800; letter-spacing: -.01em; color: inherit; }
+.font-mono { font-family: "JetBrains Mono", ui-monospace, Consolas, monospace; }
+
+/* Sticky footer: el main crece y empuja el footer al fondo (corrige el espacio en blanco) */
+.lf-main { flex: 1 0 auto; }
+
+/* Navbar */
+.lf-navbar { background: var(--lf-navy); }
+.lf-navbar .navbar-brand { color: #fff; }
+.lf-navbar .navbar-brand span { color: var(--lf-teal); }
+.lf-navbar .nav-link { color: rgba(255,255,255,.78); font-weight: 600; }
+.lf-navbar .nav-link:hover, .lf-navbar .nav-link.active { color: var(--lf-teal); }
+
+/* Botones con el color de marca */
+.btn-lf { --bs-btn-bg: var(--lf-teal); --bs-btn-border-color: var(--lf-teal); --bs-btn-color: #fff;
+  --bs-btn-hover-bg: #0f8796; --bs-btn-hover-border-color: #0f8796; --bs-btn-hover-color: #fff;
+  --bs-btn-active-bg: #0b6772; --bs-btn-active-border-color: #0b6772; font-weight: 700; }
+
+/* Eyebrow (texto pequeño sobre los títulos) */
+.eyebrow { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: .75rem; letter-spacing: .25em;
+  text-transform: uppercase; color: var(--lf-teal); }
+
+/* Hero y cabeceras de página */
+.hero, .page-header { background: radial-gradient(circle at 80% 20%, #16455f 0%, var(--lf-navy) 60%); color: #fff; }
+.hero .lead, .page-header .lead { color: rgba(255,255,255,.8); }
+.hero-img { border-radius: 1rem; box-shadow: 0 1.5rem 3rem rgba(0,0,0,.35); }
+.hero-stat strong { font-size: 1.8rem; font-weight: 800; display: block; }
+.hero-stat small { font-family: "JetBrains Mono", monospace; color: rgba(255,255,255,.7); }
+.page-header .breadcrumb { --bs-breadcrumb-divider-color: rgba(255,255,255,.5); --bs-breadcrumb-item-active-color: rgba(255,255,255,.7); }
+.page-header .breadcrumb a { color: var(--lf-teal); text-decoration: none; }
+
+/* Secciones y tarjetas */
+.section-soft { background: var(--lf-bg-soft); }
+.icon-box { width: 3.25rem; height: 3.25rem; border-radius: .75rem; display: inline-flex; align-items: center;
+  justify-content: center; background: var(--lf-teal-soft); color: var(--lf-teal); font-size: 1.5rem; }
+.card-lf { border: 1px solid #e3e8ee; border-radius: 1rem; transition: transform .2s, box-shadow .2s; }
+.card-lf:hover { transform: translateY(-4px); box-shadow: 0 .75rem 1.5rem rgba(11,29,46,.10); }
+
+/* Organigrama */
+.org-node { background: var(--lf-navy); color: #fff; border-radius: .75rem; padding: .75rem 1.25rem; font-weight: 700; }
+.org-area { background: #10697a; color: #fff; border-radius: .75rem; padding: .75rem 1rem; font-weight: 700; }
+.org-sub { background: var(--lf-teal-soft); color: #0b4f58; border-radius: .5rem; padding: .4rem .75rem; font-size: .9rem; }
+
+/* Pestañas (nav-pills) con el color de marca */
+.nav-pills { --bs-nav-pills-link-active-bg: var(--lf-navy); --bs-nav-link-color: #0f6f7c; --bs-nav-link-hover-color: var(--lf-navy); }
+
+/* Tabla de casos */
+.table-lf thead th { background: var(--lf-navy); color: #fff; font-weight: 700; }
+.stat-card { border-left: 4px solid var(--lf-teal); }
+
+/* Carrusel de testimonios */
+.carousel-testimonio { background: var(--lf-navy); color: #fff; border-radius: 1rem; }
+.carousel-testimonio .carousel-item { padding: 3rem 4.5rem; min-height: 230px; }
+.carousel-testimonio blockquote { font-size: 1.15rem; }
+
+/* Footer */
+.lf-footer { background: var(--lf-navy); color: rgba(255,255,255,.75); }
+.lf-footer a { color: rgba(255,255,255,.75); text-decoration: none; }
+.lf-footer a:hover { color: var(--lf-teal); }
+
+@media (max-width: 575.98px) {
+  .carousel-testimonio .carousel-item { padding: 2rem 2.75rem; }
+}
+
+/* ---------- Avance 3: módulo de gestión ---------- */
+.lf-navbar .dropdown-menu { border: 0; box-shadow: 0 .75rem 1.5rem rgba(11,29,46,.18); }
+.lf-navbar .dropdown-item:active { background: var(--lf-teal); }
+.form-card { border: 1px solid #e3e8ee; border-radius: 1rem; }
+.btn-accion { --bs-btn-padding-y: .2rem; --bs-btn-padding-x: .5rem; }
+.req::after { content: " *"; color: #dc3545; }

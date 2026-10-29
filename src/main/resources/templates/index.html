@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Inicio')}"></head>
+<body class="d-flex flex-column min-vh-100">
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<main class="lf-main">
+  <!-- Hero -->
+  <header class="hero py-5">
+    <div class="container py-lg-5">
+      <div class="row align-items-center g-5">
+        <div class="col-lg-6">
+          <p class="eyebrow mb-3">Peritaje informático · Cadena de custodia · Ciberseguridad</p>
+          <h1 class="display-5 mb-3">Evidencia digital que resiste el escrutinio judicial.</h1>
+          <p class="lead mb-4">Asesoría, servicios y consultoría pericial para entidades públicas y privadas, con un laboratorio
+            forense equipado con las soluciones que usan los departamentos de investigación alrededor del mundo.</p>
+          <div class="d-flex flex-wrap gap-3 mb-5">
+            <a th:href="@{/servicios}" class="btn btn-lf btn-lg px-4">Ver servicios</a>
+            <a th:href="@{/contacto}" class="btn btn-outline-light btn-lg px-4">Hablar con un perito</a>
+          </div>
+          <div class="row text-start g-3">
+            <div class="col-4 hero-stat"><strong>+180</strong><small>Casos periciales</small></div>
+            <div class="col-4 hero-stat"><strong>98%</strong><small>Cadena de custodia íntegra</small></div>
+            <div class="col-4 hero-stat"><strong>24/7</strong><small>Respuesta a incidentes</small></div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <img th:src="@{/img/hero-circuit.svg}" class="img-fluid hero-img w-100" alt="Ilustración de una placa de circuito con trazas iluminadas">
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Servicios destacados (vienen del controlador) -->
+  <section class="py-5 section-soft">
+    <div class="container py-lg-4">
+      <div class="text-center mb-5">
+        <p class="eyebrow mb-2">Qué hacemos</p>
+        <h2>Servicios destacados</h2>
+        <p class="text-muted mb-0">Un flujo de trabajo trazable, desde la adquisición de la evidencia hasta el dictamen pericial final.</p>
+      </div>
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        <div class="col" th:each="s : ${servicios}">
+          <div class="card card-lf h-100 p-2">
+            <div class="card-body">
+              <span class="icon-box mb-3"><i class="bi" th:classappend="${s.icono}"></i></span>
+              <h5 class="card-title" th:text="${s.nombre}">Servicio</h5>
+              <p class="card-text text-muted" th:text="${s.resumen}">Resumen</p>
+            </div>
+            <div class="card-footer bg-transparent border-0">
+              <a th:href="@{/servicios/{id}(id=${s.id})}" class="link-underline link-underline-opacity-0 fw-semibold">Ver detalle <i class="bi bi-arrow-right"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="text-center mt-4">
+        <a th:href="@{/servicios}" class="btn btn-outline-dark">Ver los <span th:text="${totalServicios}">6</span> servicios</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Proceso de trabajo -->
+  <section class="py-5">
+    <div class="container py-lg-4">
+      <div class="text-center mb-5">
+        <p class="eyebrow mb-2">Metodología</p>
+        <h2>Cómo trabajamos un caso</h2>
+      </div>
+      <div class="row g-4 text-center">
+        <div class="col-6 col-lg-3">
+          <span class="icon-box mb-3"><i class="bi bi-chat-square-text"></i></span>
+          <h6>1. Evaluación</h6>
+          <p class="small text-muted">Revisamos el caso y definimos el alcance y la confidencialidad.</p>
+        </div>
+        <div class="col-6 col-lg-3">
+          <span class="icon-box mb-3"><i class="bi bi-hdd-network"></i></span>
+          <h6>2. Adquisición</h6>
+          <p class="small text-muted">Copiamos la evidencia con hash y acta de cadena de custodia.</p>
+        </div>
+        <div class="col-6 col-lg-3">
+          <span class="icon-box mb-3"><i class="bi bi-search"></i></span>
+          <h6>3. Análisis</h6>
+          <p class="small text-muted">Reconstruimos los hechos con herramientas forenses certificadas.</p>
+        </div>
+        <div class="col-6 col-lg-3">
+          <span class="icon-box mb-3"><i class="bi bi-file-earmark-check"></i></span>
+          <h6>4. Dictamen</h6>
+          <p class="small text-muted">Entregamos el informe pericial y lo sustentamos en audiencia.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonios: carrusel de Bootstrap -->
+  <section class="py-5 section-soft">
+    <div class="container py-lg-4">
+      <div class="text-center mb-4">
+        <p class="eyebrow mb-2">Confianza</p>
+        <h2>Lo que dicen nuestros clientes</h2>
+      </div>
+      <div id="carouselTestimonios" class="carousel slide carousel-testimonio col-lg-9 mx-auto" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+          <button type="button" data-bs-target="#carouselTestimonios" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Testimonio 1"></button>
+          <button type="button" data-bs-target="#carouselTestimonios" data-bs-slide-to="1" aria-label="Testimonio 2"></button>
+          <button type="button" data-bs-target="#carouselTestimonios" data-bs-slide-to="2" aria-label="Testimonio 3"></button>
+        </div>
+        <div class="carousel-inner text-center">
+          <div class="carousel-item active">
+            <blockquote class="mb-3">“El dictamen fue claro para el juez y resistió las observaciones de la parte contraria.”</blockquote>
+            <p class="eyebrow mb-0">Estudio jurídico · Lima</p>
+          </div>
+          <div class="carousel-item">
+            <blockquote class="mb-3">“Contuvieron el ransomware en horas y nos explicaron cómo entró el atacante.”</blockquote>
+            <p class="eyebrow mb-0">Empresa de logística · Callao</p>
+          </div>
+          <div class="carousel-item">
+            <blockquote class="mb-3">“La auditoría interna se hizo con total reserva y con evidencia sólida.”</blockquote>
+            <p class="eyebrow mb-0">Área de compliance · Arequipa</p>
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselTestimonios" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="visually-hidden">Anterior</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselTestimonios" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span><span class="visually-hidden">Siguiente</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Llamado a la acción -->
+  <section class="py-5">
+    <div class="container">
+      <div class="row align-items-center g-4 p-4 p-lg-5 rounded-4 hero">
+        <div class="col-lg-8">
+          <h3 class="mb-2">¿Necesita preservar evidencia digital hoy?</h3>
+          <p class="mb-0 text-white-50">Tenemos <span th:text="${totalCasos}">8</span> expedientes activos este trimestre y un perito de guardia 24/7.</p>
+        </div>
+        <div class="col-lg-4 text-lg-end">
+          <a th:href="@{/contacto}" class="btn btn-lf btn-lg">Solicitar evaluación</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>

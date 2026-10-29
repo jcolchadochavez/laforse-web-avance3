@@ -1,0 +1,21 @@
+{
+  "info": { "name": "LAFORSE-HG API de casos", "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json" },
+  "variable": [ { "key": "base", "value": "http://localhost:8080" } ],
+  "item": [
+    { "name": "1. Listar casos", "request": { "method": "GET", "url": "{{base}}/api/casos" } },
+    { "name": "2. Filtrar por estado", "request": { "method": "GET", "url": "{{base}}/api/casos?estado=EN_ANALISIS" } },
+    { "name": "3. Registrar caso", "request": { "method": "POST", "header": [ { "key": "Content-Type", "value": "application/json" } ],
+      "body": { "mode": "raw", "raw": "{\n  \"expediente\": \"PJ-2026-0300\",\n  \"tipo\": \"Análisis de USB incautado\",\n  \"fechaInicio\": \"2026-10-28\",\n  \"estado\": \"PROGRAMADO\",\n  \"peritoId\": 1,\n  \"servicioId\": 2\n}" },
+      "url": "{{base}}/api/casos" } },
+    { "name": "4. Obtener caso", "request": { "method": "GET", "url": "{{base}}/api/casos/9" } },
+    { "name": "5. Actualizar caso", "request": { "method": "PUT", "header": [ { "key": "Content-Type", "value": "application/json" } ],
+      "body": { "mode": "raw", "raw": "{\n  \"expediente\": \"PJ-2026-0300\",\n  \"tipo\": \"Análisis de USB incautado\",\n  \"fechaInicio\": \"2026-10-28\",\n  \"estado\": \"EN_ANALISIS\",\n  \"peritoId\": 1,\n  \"servicioId\": 2\n}" },
+      "url": "{{base}}/api/casos/9" } },
+    { "name": "6. Eliminar caso", "request": { "method": "DELETE", "url": "{{base}}/api/casos/9" } },
+    { "name": "7. Error de validación (400)", "request": { "method": "POST", "header": [ { "key": "Content-Type", "value": "application/json" } ],
+      "body": { "mode": "raw", "raw": "{ \"expediente\": \"123\" }" }, "url": "{{base}}/api/casos" } },
+    { "name": "8. Expediente duplicado (409)", "request": { "method": "POST", "header": [ { "key": "Content-Type", "value": "application/json" } ],
+      "body": { "mode": "raw", "raw": "{\n  \"expediente\": \"PJ-2026-0142\",\n  \"tipo\": \"Duplicado de prueba\",\n  \"fechaInicio\": \"2026-10-28\",\n  \"estado\": \"PROGRAMADO\",\n  \"peritoId\": 1,\n  \"servicioId\": 1\n}" },
+      "url": "{{base}}/api/casos" } }
+  ]
+}

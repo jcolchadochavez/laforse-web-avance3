@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head((${casoId == null} ? 'Nuevo caso' : 'Editar caso'))}"></head>
+<body class="d-flex flex-column min-vh-100">
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<main class="lf-main">
+  <header th:replace="~{fragments/layout :: pageHeader('Gestión de casos', (${casoId == null} ? 'Registrar caso' : 'Editar caso'), 'Los campos con * son obligatorios. Los datos se validan en el navegador y en el servidor antes de guardarse en MySQL.')}"></header>
+
+  <section class="py-5 section-soft">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-9">
+          <div class="card form-card shadow-sm">
+            <div class="card-body p-4 p-lg-5">
+              <form th:action="${casoId == null} ? @{/casos} : @{/casos/{id}(id=${casoId})}" th:object="${caso}"
+                    method="post" novalidate class="row g-3 needs-validation">
+                <input type="hidden" th:field="*{solicitudId}">
+                <!-- Errores generales (reglas de negocio sin campo asociado) -->
+                <div class="col-12" th:if="${#fields.hasGlobalErrors()}">
+                  <div class="alert alert-danger mb-0" th:each="e : ${#fields.globalErrors()}">
+                    <i class="bi bi-exclamation-triangle-fill"></i> <span th:text="${e}">Error</span></div>
+                </div>
+                <div class="col-12" th:if="${#fields.hasAnyErrors() and !#fields.hasGlobalErrors()}">
+                  <div class="alert alert-warning small mb-0">Revise los campos marcados en rojo.</div>
+                </div>
+
+                <div class="col-md-4">
+                  <label for="expediente" class="form-label fw-semibold req">N.° de expediente</label>
+                  <input type="text" id="expediente" th:field="*{expediente}" class="form-control font-mono" required
+                         pattern="PJ-[0-9]{4}-[0-9]{4}" th:errorclass="is-invalid" placeholder="PJ-2026-0201">
+                  <div class="invalid-feedback" th:if="${#fields.hasErrors('expediente')}" th:text="${#fields.errors('expediente')[0]}"></div>
+                  <div class="invalid-feedback" th:unless="${#fields.hasErrors('expediente')}">Formato PJ-AAAA-NNNN.</div>
+                </div>
+                <div class="col-md-8">
+                  <label for="tipo" class="form-label fw-semibold req">Tipo de peritaje</label>
+                  <input type="text" id="tipo" th:field="*{tipo}" class="form-control" required minlength="5" maxlength="120"
+                         th:errorclass="is-invalid" placeholder="Ej. Análisis de dispositivo móvil">
+                  <div class="invalid-feedback" th:if="${#fields.hasErrors('tipo')}" th:text="${#fields.errors('tipo')[0]}"></div>
+                  <div class="invalid-feedback" th:unless="${#fields.hasErrors('tipo')}">Entre 5 y 120 caracteres.</div>
+                </div>
+
+                <div class="col-md-6">
+                  <label for="servicioId" class="form-label fw-semibold req">Servicio</label>
+                  <select id="servicioId" th:field="*{servicioId}" class="form-select" required th:errorclass="is-invalid">
+                    <option value="">Seleccione...</option>
+                    <option th:each="s : ${servicios}" th:value="${s.id}" th:text="${s.nombre}">Servicio</option>
+                  </select>
+                  <div class="invalid-feedback" th:if="${#fields.hasErrors('servicioId')}" th:text="${#fields.errors('servicioId')[0]}"></div>
+                  <div class="invalid-feedback" th:unless="${#fields.hasErrors('servicioId')}">Seleccione el servicio.</div>
+                </div>
+                <div class="col-md-6">
+                  <label for="peritoId" class="form-label fw-semibold req">Perito responsable</label>
+                  <select id="peritoId" th:field="*{peritoId}" class="form-select" required th:errorclass="is-invalid">
+                    <option value="">Seleccione...</option>
+                    <option th:each="p : ${peritos}" th:value="${p.id}"
+                            th:text="${p.nombres} + ' – ' + ${p.especialidad} + (${p.activo} ? '' : ' (inactivo)')">Perito</option>
+                  </select>
+                  <div class="invalid-feedback" th:if="${#fields.hasErrors('peritoId')}" th:text="${#fields.errors('peritoId')[0]}"></div>
+                  <div class="invalid-feedback" th:unless="${#fields.hasErrors('peritoId')}">Seleccione el perito.</div>
+                </div>
+
+                <div class="col-md-6">
+                  <label for="fechaInicio" class="form-label fw-semibold req">Fecha de inicio</label>
+                  <input type="date" id="fechaInicio" th:field="*{fechaInicio}" class="form-control" required
+                         th:max="${#temporals.format(#temporals.createToday(), 'yyyy-MM-dd')}" th:errorclass="is-invalid">
+                  <div class="invalid-feedback" th:if="${#fields.hasErrors('fechaInicio')}" th:text="${#fields.errors('fechaInicio')[0]}"></div>
+                  <div class="invalid-feedback" th:unless="${#fields.hasErrors('fechaInicio')}">No puede ser una fecha futura.</div>
+                </div>
+                <div class="col-md-6">
+                  <label for="estado" class="form-label fw-semibold req">Estado</label>
+                  <select id="estado" th:field="*{estado}" class="form-select" required th:errorclass="is-invalid">
+                    <option th:each="e : ${estados}" th:value="${e}" th:text="${e.etiqueta}">Estado</option>
+                  </select>
+                  <div class="invalid-feedback" th:if="${#fields.hasErrors('estado')}" th:text="${#fields.errors('estado')[0]}"></div>
+                  <div class="form-text">Al marcar «Dictamen entregado» el caso queda cerrado y ya no se puede editar ni eliminar.</div>
+                </div>
+
+                <div class="col-12">
+                  <label for="observaciones" class="form-label fw-semibold">Observaciones</label>
+                  <textarea id="observaciones" th:field="*{observaciones}" rows="4" maxlength="500" class="form-control"
+                            th:errorclass="is-invalid" placeholder="Dispositivos recibidos, cadena de custodia, notas del perito..."></textarea>
+                  <div class="invalid-feedback" th:if="${#fields.hasErrors('observaciones')}" th:text="${#fields.errors('observaciones')[0]}"></div>
+                </div>
+
+                <div class="col-12 d-flex gap-2 justify-content-end pt-2">
+                  <a th:href="@{/casos}" class="btn btn-outline-secondary">Cancelar</a>
+                  <button type="submit" class="btn btn-lf px-4"><i class="bi bi-save"></i>
+                    <span th:text="${casoId == null} ? 'Registrar caso' : 'Guardar cambios'">Guardar</span></button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>

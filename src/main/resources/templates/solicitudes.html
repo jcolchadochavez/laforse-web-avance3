@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Solicitudes')}"></head>
+<body class="d-flex flex-column min-vh-100">
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<main class="lf-main">
+  <header th:replace="~{fragments/layout :: pageHeader('Gestión', 'Solicitudes recibidas', 'Solicitudes enviadas desde el formulario de contacto. Desde aquí se abre el caso pericial correspondiente.')}"></header>
+
+  <section class="py-5 section-soft">
+    <div class="container">
+      <div th:replace="~{fragments/layout :: alertas}"></div>
+
+      <ul class="nav nav-pills mb-3 gap-1">
+        <li class="nav-item"><a class="nav-link" th:classappend="${estadoSel == null} ? 'active'" th:href="@{/solicitudes}">Todas</a></li>
+        <li class="nav-item" th:each="e : ${estados}">
+          <a class="nav-link" th:classappend="${e == estadoSel} ? 'active'" th:href="@{/solicitudes(estado=${e})}">
+            <span th:text="${e.etiqueta}">Estado</span> <span class="badge text-bg-light" th:text="${conteo.get(e)}">0</span></a>
+        </li>
+      </ul>
+
+      <div class="table-responsive rounded-3 shadow-sm">
+        <table class="table table-lf table-striped table-hover align-middle mb-0 bg-white">
+          <thead>
+            <tr><th>Código</th><th>Fecha</th><th>Cliente</th><th class="d-none d-lg-table-cell">Servicio</th>
+                <th class="d-none d-md-table-cell">Urgencia</th><th>Estado</th><th class="text-end">Acciones</th></tr>
+          </thead>
+          <tbody>
+            <tr th:each="s : ${solicitudes}">
+              <td class="font-mono text-nowrap" th:text="${s.codigo}">SOL-2026-0001</td>
+              <td class="text-nowrap small" th:text="${#temporals.format(s.fecha, 'dd/MM/yyyy HH:mm')}">fecha</td>
+              <td><span class="fw-semibold" th:text="${s.nombre}">Cliente</span><br>
+                  <span class="small text-muted" th:text="${s.correo}">correo</span></td>
+              <td class="d-none d-lg-table-cell small" th:text="${s.servicio.nombre}">Servicio</td>
+              <td class="d-none d-md-table-cell small">
+                <span th:classappend="${s.urgencia.name() == 'CRITICA'} ? 'text-danger fw-bold'" th:text="${s.urgencia.etiqueta}">Media</span></td>
+              <td><span class="badge" th:classappend="'text-bg-' + ${s.estado.color}">
+                <i class="bi" th:classappend="${s.estado.icono}"></i> <span th:text="${s.estado.etiqueta}">Estado</span></span></td>
+              <td class="text-end text-nowrap">
+                <a th:if="${s.estado.name() == 'PENDIENTE'}" th:href="@{/casos/nuevo(solicitud=${s.id})}" class="btn btn-lf btn-sm btn-accion" title="Abrir caso"><i class="bi bi-folder-plus"></i> Abrir caso</a>
+                <form th:if="${s.estado.name() == 'PENDIENTE'}" th:action="@{/solicitudes/{id}/estado(id=${s.id})}" method="post" class="d-inline">
+                  <input type="hidden" name="estado" value="DESCARTADA">
+                  <button type="submit" class="btn btn-outline-secondary btn-sm btn-accion" title="Descartar"><i class="bi bi-x-circle"></i></button>
+                </form>
+                <button type="button" class="btn btn-outline-danger btn-sm btn-accion" title="Eliminar"
+                        data-bs-toggle="modal" data-bs-target="#modalEliminar"
+                        th:data-nombre="'la solicitud ' + ${s.codigo}" th:data-url="@{/solicitudes/{id}/eliminar(id=${s.id})}"><i class="bi bi-trash"></i></button>
+              </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(solicitudes)}">
+              <td colspan="7" class="text-center text-muted py-4">No hay solicitudes en este estado.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div th:replace="~{fragments/layout :: modalEliminar}"></div>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>

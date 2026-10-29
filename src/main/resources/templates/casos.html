@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Casos')}"></head>
+<body class="d-flex flex-column min-vh-100">
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<main class="lf-main">
+  <header th:replace="~{fragments/layout :: pageHeader('Gestión', 'Casos periciales', 'Registro, consulta, edición y eliminación de expedientes almacenados en MySQL.')}"></header>
+
+  <section class="py-5 section-soft">
+    <div class="container">
+      <div th:replace="~{fragments/layout :: alertas}"></div>
+
+      <!-- Resumen por estado: conteos calculados con consultas a la BD -->
+      <div class="row row-cols-2 row-cols-lg-4 g-3 mb-4">
+        <div class="col" th:each="e : ${estados}">
+          <a class="text-decoration-none text-reset" th:href="@{/casos(estado=${e})}">
+            <div class="card stat-card h-100 border-0 shadow-sm">
+              <div class="card-body">
+                <p class="small text-muted mb-1"><i class="bi" th:classappend="${e.icono} + ' text-' + ${e.color}"></i> <span th:text="${e.etiqueta}">Estado</span></p>
+                <p class="h3 mb-0" th:text="${conteo.get(e)}">0</p>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Filtros: GET /casos?estado=...&q=... -->
+      <form th:action="@{/casos}" method="get" class="row g-2 align-items-end mb-3">
+        <div class="col-sm-6 col-md-3">
+          <label for="estado" class="form-label small fw-semibold">Estado</label>
+          <select id="estado" name="estado" class="form-select">
+            <option value="">Todos los estados</option>
+            <option th:each="e : ${estados}" th:value="${e}" th:text="${e.etiqueta}" th:selected="${e == estadoSel}">Estado</option>
+          </select>
+        </div>
+        <div class="col-sm-6 col-md-4">
+          <label for="q" class="form-label small fw-semibold">Buscar</label>
+          <input type="search" id="q" name="q" th:value="${q}" class="form-control" placeholder="Expediente, tipo o perito">
+        </div>
+        <div class="col-auto">
+          <button type="submit" class="btn btn-outline-dark"><i class="bi bi-funnel"></i> Filtrar</button>
+          <a th:href="@{/casos}" class="btn btn-outline-secondary" th:if="${estadoSel != null or (q != null and !#strings.isEmpty(q))}">Limpiar</a>
+        </div>
+        <div class="col-md text-md-end">
+          <a th:href="@{/casos/nuevo}" class="btn btn-lf"><i class="bi bi-plus-circle"></i> Nuevo caso</a>
+        </div>
+      </form>
+      <p class="small text-muted">Mostrando <strong th:text="${#lists.size(casos)}">5</strong> de <span th:text="${totalCasos}">8</span> expedientes</p>
+
+      <div class="table-responsive rounded-3 shadow-sm">
+        <table class="table table-lf table-striped table-hover align-middle mb-0 bg-white">
+          <thead>
+            <tr><th>N.° Expediente</th><th>Tipo de peritaje</th><th class="d-none d-xl-table-cell">Servicio</th>
+                <th class="d-none d-md-table-cell">Inicio</th><th class="d-none d-lg-table-cell">Perito</th><th>Estado</th><th class="text-end">Acciones</th></tr>
+          </thead>
+          <tbody>
+            <tr th:each="c : ${casos}">
+              <td class="font-mono text-nowrap" th:text="${c.expediente}">PJ-2026-0001</td>
+              <td>
+                <span th:text="${c.tipo}">Tipo</span>
+                <span th:if="${c.solicitud}" class="badge rounded-pill text-bg-light border ms-1" th:text="${c.solicitud.codigo}">SOL</span>
+              </td>
+              <td class="d-none d-xl-table-cell small" th:text="${c.servicio.nombre}">Servicio</td>
+              <td class="d-none d-md-table-cell" th:text="${#temporals.format(c.fechaInicio, 'dd/MM/yyyy')}">01/01/2026</td>
+              <td class="d-none d-lg-table-cell" th:text="${c.perito.nombres}">Perito</td>
+              <td><span class="badge" th:classappend="'text-bg-' + ${c.estado.color}">
+                <i class="bi" th:classappend="${c.estado.icono}"></i> <span th:text="${c.estado.etiqueta}">Estado</span></span></td>
+              <td class="text-end text-nowrap">
+                <th:block th:unless="${c.cerrado}">
+                  <a th:href="@{/casos/{id}/editar(id=${c.id})}" class="btn btn-outline-primary btn-sm btn-accion" title="Editar"><i class="bi bi-pencil"></i></a>
+                  <button type="button" class="btn btn-outline-danger btn-sm btn-accion" title="Eliminar"
+                          data-bs-toggle="modal" data-bs-target="#modalEliminar"
+                          th:data-nombre="'el caso ' + ${c.expediente}" th:data-url="@{/casos/{id}/eliminar(id=${c.id})}"><i class="bi bi-trash"></i></button>
+                </th:block>
+                <span th:if="${c.cerrado}" class="small text-muted" title="Dictamen entregado: solo lectura"><i class="bi bi-lock"></i> Cerrado</span>
+              </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(casos)}">
+              <td colspan="7" class="text-center text-muted py-4">No hay expedientes que coincidan con el filtro.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div th:replace="~{fragments/layout :: modalEliminar}"></div>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>
