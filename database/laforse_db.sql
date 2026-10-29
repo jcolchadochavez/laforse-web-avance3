@@ -1,19 +1,16 @@
--- =====================================================================
 -- LAFORSE-HG - Sistema de gestión de solicitudes y casos periciales
 -- Script de creación de la base de datos (MySQL 8)
 -- Curso: Marcos de Desarrollo Web - Avance 3
 -- Uso: ejecutar en MySQL Workbench antes del primer arranque.
 --      (Si no se ejecuta, Hibernate crea las tablas con ddl-auto=update
 --       y DataSeeder carga los mismos datos iniciales.)
--- =====================================================================
 
 DROP DATABASE IF EXISTS laforse_db;
 CREATE DATABASE laforse_db CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci;
 USE laforse_db;
 
--- ---------------------------------------------------------------------
 -- Catálogo de servicios del laboratorio
--- ---------------------------------------------------------------------
+
 CREATE TABLE servicio (
   id            INT          NOT NULL AUTO_INCREMENT,
   nombre        VARCHAR(80)  NOT NULL,
@@ -28,9 +25,9 @@ CREATE TABLE servicio (
   CONSTRAINT uk_servicio_nombre UNIQUE (nombre)
 ) ENGINE = InnoDB;
 
--- ---------------------------------------------------------------------
+
 -- Peritos informáticos
--- ---------------------------------------------------------------------
+
 CREATE TABLE perito (
   id            BIGINT       NOT NULL AUTO_INCREMENT,
   nombres       VARCHAR(80)  NOT NULL,
@@ -43,9 +40,8 @@ CREATE TABLE perito (
   CONSTRAINT ck_perito_telefono CHECK (telefono IS NULL OR telefono REGEXP '^9[0-9]{8}$')
 ) ENGINE = InnoDB;
 
--- ---------------------------------------------------------------------
 -- Solicitudes recibidas desde el formulario de contacto
--- ---------------------------------------------------------------------
+
 CREATE TABLE solicitud (
   id            BIGINT       NOT NULL AUTO_INCREMENT,
   codigo        VARCHAR(20)  NOT NULL,
@@ -62,9 +58,9 @@ CREATE TABLE solicitud (
   CONSTRAINT fk_solicitud_servicio FOREIGN KEY (servicio_id) REFERENCES servicio (id)
 ) ENGINE = InnoDB;
 
--- ---------------------------------------------------------------------
+
 -- Casos (expedientes periciales)
--- ---------------------------------------------------------------------
+
 CREATE TABLE caso (
   id            BIGINT       NOT NULL AUTO_INCREMENT,
   expediente    VARCHAR(12)  NOT NULL,
@@ -86,9 +82,9 @@ CREATE TABLE caso (
 CREATE INDEX ix_caso_estado ON caso (estado);
 CREATE INDEX ix_solicitud_estado ON solicitud (estado);
 
--- ---------------------------------------------------------------------
+
 -- Datos iniciales
--- ---------------------------------------------------------------------
+
 INSERT INTO servicio (nombre, resumen, descripcion, herramientas, entregables, plazo, icono, disponible) VALUES
 ('Adquisición de evidencia',
  'Copiado forense bit a bit de discos, dispositivos móviles y servidores, preservando el hash original.',
@@ -136,9 +132,9 @@ INSERT INTO caso (expediente, tipo, fecha_inicio, estado, perito_id, servicio_id
 ('PJ-2026-0191', 'Peritaje de video de cámara de seguridad', '2026-09-12', 'EN_ANALISIS',        1, 2),
 ('PJ-2026-0197', 'Fuga de información en área comercial',    '2026-09-21', 'PROGRAMADO',         2, 6);
 
--- ---------------------------------------------------------------------
+
 -- Consultas para las evidencias del informe
--- ---------------------------------------------------------------------
+
 -- SELECT * FROM servicio;
 -- SELECT * FROM perito;
 -- SELECT c.expediente, c.tipo, c.estado, p.nombres AS perito, s.nombre AS servicio
